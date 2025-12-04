@@ -16,7 +16,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(180deg, #0a0e27 0%, #1a1f3a 50%, #0f1419 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -52,8 +52,8 @@
         }
 
         .container {
-            max-width: 1200px;
-            width: 100%;
+            max-width: 1000px;
+            width: 95%;
             position: relative;
             z-index: 1;
         }
@@ -61,8 +61,8 @@
         h1 {
             color: white;
             text-align: center;
-            margin-bottom: 30px;
-            font-size: 0.9em;
+            margin-bottom: 15px;
+            font-size: 0.85em;
             font-weight: 300;
             line-height: 1.3;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
@@ -76,8 +76,9 @@
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            margin-bottom: 50px;
+            margin-bottom: 20px;
             position: relative;
+            max-height: 60vh;
         }
 
         .tv-card iframe {
@@ -94,7 +95,7 @@
             margin: 0 auto;
         }
 
-        .random-button {
+        .random-button, .corkboard-button {
             width: 60px;
             height: 60px;
             padding: 0;
@@ -114,6 +115,17 @@
             position: relative;
             overflow: hidden;
         }
+        
+        .corkboard-button {
+            color: #151A2A;
+            background: #151A2A;
+        }
+        
+        .corkboard-button span {
+            position: relative;
+            z-index: 1;
+            color: #151A2A;
+        }
 
         .random-button::before {
             content: '';
@@ -128,7 +140,7 @@
 
         .random-button:hover::before {
             opacity: 1;
-            animation: christmasLight 1.5s ease-in-out infinite;
+            animation: christmasLight 2.5s ease-in-out infinite;
         }
 
         .random-button span {
@@ -206,31 +218,259 @@
             padding: 20px 30px;
             display: flex;
             align-items: center;
+            justify-content: center;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             min-height: 60px;
         }
 
         .title-text {
-            font-size: 1.3em;
+            font-size: 1.0em;
             color: #333;
             font-weight: 500;
+            text-align: center;
+            width: 100%;
+        }
+
+        @media (max-width: 1440px) {
+            body {
+                padding: 8px;
+            }
+            
+            .container {
+                max-width: 90%;
+            }
+            
+            h1 {
+                font-size: 0.75em;
+                margin-bottom: 10px;
+            }
+            
+            .tv-card {
+                margin-bottom: 15px;
+                max-height: 55vh;
+            }
+            
+            .controls-container {
+                width: 65%;
+                gap: 10px;
+            }
         }
 
         @media (max-width: 768px) {
+            body {
+                padding: 5px;
+            }
+            
             h1 {
-                font-size: 0.8em;
+                font-size: 0.7em;
                 white-space: normal;
+                margin-bottom: 8px;
+            }
+            
+            .tv-card {
+                margin-bottom: 10px;
+                max-height: 50vh;
+                border-radius: 10px;
             }
 
             .controls-container {
                 flex-direction: column;
                 width: 90%;
+                gap: 10px;
             }
 
-            .random-button {
-                width: 60px;
-                height: 60px;
+            .random-button, .corkboard-button {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2em;
             }
+            
+            .title-card {
+                padding: 15px 20px;
+                min-height: 50px;
+            }
+            
+            .title-text {
+                font-size: 0.9em;
+            }
+        }
+
+        /* 코르크보드 팝업 */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-overlay.active {
+            display: flex;
+        }
+
+        .corkboard-container {
+            position: relative;
+            width: 90vw;
+            max-width: 1200px;
+            height: 90vh;
+            max-height: 800px;
+            background: #6B5233;
+            border: 20px solid #4A3A26;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            padding: 40px;
+        }
+
+        .corkboard {
+            width: 100%;
+            height: 100%;
+            background: 
+                /* 코르크 노이즈 텍스처 */
+                repeating-linear-gradient(0deg, 
+                    rgba(139, 111, 71, 0.1) 0px, 
+                    rgba(107, 82, 51, 0.15) 1px, 
+                    rgba(139, 111, 71, 0.1) 2px, 
+                    rgba(90, 66, 40, 0.1) 3px),
+                repeating-linear-gradient(90deg, 
+                    rgba(139, 111, 71, 0.1) 0px, 
+                    rgba(107, 82, 51, 0.15) 1px, 
+                    rgba(139, 111, 71, 0.1) 2px, 
+                    rgba(90, 66, 40, 0.1) 3px),
+                /* 세로 그리드 */
+                repeating-linear-gradient(0deg, 
+                    transparent 0px, 
+                    transparent 1px, 
+                    rgba(107, 82, 51, 0.3) 1px, 
+                    rgba(107, 82, 51, 0.3) 2px, 
+                    transparent 2px, 
+                    transparent 4px),
+                /* 가로 그리드 */
+                repeating-linear-gradient(90deg, 
+                    transparent 0px, 
+                    transparent 1px, 
+                    rgba(107, 82, 51, 0.3) 1px, 
+                    rgba(107, 82, 51, 0.3) 2px, 
+                    transparent 2px, 
+                    transparent 4px),
+                /* 코르크 자연스러운 패턴 */
+                radial-gradient(ellipse 200px 150px at 20% 30%, rgba(139, 111, 71, 0.4) 0%, transparent 50%),
+                radial-gradient(ellipse 180px 120px at 70% 50%, rgba(107, 82, 51, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse 150px 200px at 40% 70%, rgba(90, 66, 40, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse 220px 180px at 80% 20%, rgba(139, 111, 71, 0.35) 0%, transparent 50%),
+                /* 기본 그라데이션 */
+                linear-gradient(135deg, #8B6F47 0%, #7A5F3E 25%, #6B5233 50%, #5A4228 75%, #4A3520 100%);
+            background-size: 
+                4px 4px,
+                4px 4px,
+                4px 4px,
+                4px 4px,
+                100% 100%,
+                100% 100%,
+                100% 100%,
+                100% 100%,
+                100% 100%;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                inset 0 0 100px rgba(0, 0, 0, 0.2),
+                inset 0 0 200px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 코르크 질감 오버레이 */
+        .corkboard::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(45deg, 
+                    transparent 0px, 
+                    transparent 8px, 
+                    rgba(139, 111, 71, 0.05) 8px, 
+                    rgba(139, 111, 71, 0.05) 9px),
+                repeating-linear-gradient(-45deg, 
+                    transparent 0px, 
+                    transparent 10px, 
+                    rgba(107, 82, 51, 0.05) 10px, 
+                    rgba(107, 82, 51, 0.05) 11px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+
+        /* 드래그 가능한 이미지 */
+        .photo-wrapper {
+            position: absolute;
+        }
+
+        .corkboard-photo {
+            position: relative;
+            cursor: move;
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.1s, box-shadow 0.1s;
+            max-width: 200px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            display: block;
+        }
+
+        .corkboard-photo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+            z-index: 10;
+        }
+
+        .corkboard-photo.dragging {
+            opacity: 0.8;
+            z-index: 100;
+            transform: scale(1.1);
+        }
+
+        .photo-pin {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 16px;
+            background: #DC143C;
+            border-radius: 50% 50% 50% 0;
+            transform: translateX(-50%) rotate(-45deg);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .close-popup {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .close-popup:hover {
+            background: #fff;
+            transform: scale(1.1);
         }
     </style>
 </head>
@@ -246,9 +486,19 @@
         </div>
 
         <div class="controls-container">
+            <button class="corkboard-button" onclick="openCorkboard()"><span>★</span></button>
             <button class="random-button" onclick="playRandomVideo(event)"><span>♥</span></button>
             <div class="title-card">
                 <div class="title-text" id="titleText">버튼을 눌러 영상을 재생하세요</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 코르크보드 팝업 -->
+    <div class="popup-overlay" id="corkboardPopup">
+        <div class="corkboard-container">
+            <button class="close-popup" onclick="closeCorkboard()">×</button>
+            <div class="corkboard" id="corkboard">
             </div>
         </div>
     </div>
@@ -421,6 +671,275 @@
                 }, duration * 1000);
             }
         }
+
+        // 코르크보드 관련 함수
+        const imageFiles = [
+            'img/photo_2025-12-04_12-47-01.jpg',
+            'img/photo_2025-12-04_12-47-03 (2).jpg',
+            'img/photo_2025-12-04_12-47-03 (3).jpg',
+            'img/photo_2025-12-04_12-47-03.jpg',
+            'img/photo_2025-12-04_12-47-04.jpg',
+            'img/photo_2025-12-04_12-47-05 (2).jpg',
+            'img/photo_2025-12-04_12-47-05 (3).jpg',
+            'img/photo_2025-12-04_12-47-05.jpg',
+            'img/photo_2025-12-04_12-47-06.jpg',
+            'img/photo_2025-12-04_12-47-07.jpg',
+            'img/photo_2025-12-04_12-47-08.jpg',
+            'img/photo_2025-12-04_12-47-09.jpg',
+            'img/photo_2025-12-04_12-48-11.jpg'
+        ];
+
+
+        function openCorkboard() {
+            const popup = document.getElementById('corkboardPopup');
+            popup.classList.add('active');
+            loadPhotos();
+        }
+
+        function closeCorkboard() {
+            const popup = document.getElementById('corkboardPopup');
+            popup.classList.remove('active');
+        }
+
+        let isDragging = false;
+        let currentPhoto = null;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        function loadPhotos() {
+            const corkboard = document.getElementById('corkboard');
+            // 기존 사진 제거
+            const existingPhotos = corkboard.querySelectorAll('.photo-wrapper');
+            existingPhotos.forEach(photo => photo.remove());
+
+            const minSpacing = 40; // 사진 간 최소 간격 (px) - 줄임
+            const placedPhotos = []; // 배치된 사진들의 정보 저장 {x, y, width, height}
+            
+            // 모든 이미지를 먼저 로드
+            let loadedCount = 0;
+            const photoData = [];
+            
+            imageFiles.forEach((imagePath, index) => {
+                const img = new Image();
+                const targetWidth = 150 + Math.random() * 50; // 150-200px
+                
+                img.onload = function() {
+                    // 이미지 크기 계산 (비율 유지)
+                    const aspectRatio = this.height / this.width;
+                    const imgWidth = targetWidth;
+                    const imgHeight = targetWidth * aspectRatio;
+                    
+                    photoData[index] = {
+                        path: imagePath,
+                        width: imgWidth,
+                        height: imgHeight
+                    };
+                    
+                    loadedCount++;
+                    
+                    // 모든 이미지가 로드되면 배치 시작
+                    if (loadedCount === imageFiles.length) {
+                        placeAllPhotos();
+                    }
+                };
+                
+                img.src = imagePath;
+            });
+            
+            function placeAllPhotos() {
+                const corkboardRect = corkboard.getBoundingClientRect();
+                const padding = 50; // 경계에서 최소 여백 (px)
+                
+                // 이미지 참고 기본 위치 설정 (퍼센트) - 실제 이미지 배치 반영
+                const defaultPositions = [
+                    { left: 12, top: 12 },   // 1. 상단 왼쪽 - 그룹 사진 (해변, 다섯 명)
+                    { left: 25, top: 18 },   // 2. 상단 중앙 왼쪽 - 개인 1 (밝은 머리, 흰색 비니, 갈색 재킷)
+                    { left: 42, top: 15 },   // 3. 상단 중앙 - 개인 2 (어두운 머리, 검은색 브이넥, 브이 포즈)
+                    { left: 58, top: 10 },   // 4. 상단 중앙 오른쪽 - 해변/선물 (가로 사진, 빨간 선물 상자)
+                    { left: 78, top: 18 },   // 5. 상단 오른쪽 - 개인 3 (어두운 머리, 어두운 스웨터)
+                    { left: 65, top: 38 },   // 6. 중앙 오른쪽 - 개인 4 (밝은 머리, 흰색 털모자, 빨간색 패턴 스웨터)
+                    { left: 15, top: 42 },   // 7. 중앙 왼쪽 - 개인 5 (어두운 머리, 회색 니트 스웨터)
+                    { left: 22, top: 62 },   // 8. 중앙 하단 왼쪽 - 개인 6 (안경, 줄무늬, 회색 블레이저)
+                    { left: 48, top: 58 },   // 9. 중앙 하단 중앙 - 개인 7 (하트 손, 빨간색과 검은색 줄무늬)
+                    { left: 18, top: 78 },   // 10. 하단 왼쪽 - 그룹 사진 (크리스마스, 네 명, 빨간색 후드티)
+                    { left: 38, top: 72 },   // 11. 하단 중앙 왼쪽 - 개인 8 (녹색 스웨터)
+                    { left: 68, top: 78 },   // 12. 하단 중앙 오른쪽 - 개인 9 (안경, 빨간색 스웨터)
+                    { left: 82, top: 68 }    // 13. 하단 오른쪽 - 개인 10 (체크 셔츠, 손가락 하트)
+                ];
+                
+                photoData.forEach((photo, index) => {
+                    let x, y;
+                    
+                    // 기본 위치가 있으면 사용, 없으면 랜덤 배치
+                    if (defaultPositions[index]) {
+                        const pos = defaultPositions[index];
+                        x = (corkboardRect.width * pos.left / 100);
+                        y = (corkboardRect.height * pos.top / 100);
+                        
+                        // 약간의 랜덤 오프셋 추가 (자연스러운 느낌, 작은 범위)
+                        const offsetX = (Math.random() - 0.5) * 8;
+                        const offsetY = (Math.random() - 0.5) * 8;
+                        x += offsetX;
+                        y += offsetY;
+                        
+                        // 경계 체크 및 조정
+                        const minX = padding + photo.width / 2;
+                        const maxX = corkboardRect.width - padding - photo.width / 2;
+                        const minY = padding + photo.height / 2;
+                        const maxY = corkboardRect.height - padding - photo.height / 2;
+                        
+                        x = Math.max(minX, Math.min(maxX, x));
+                        y = Math.max(minY, Math.min(maxY, y));
+                    } else {
+                        // 기본 위치가 없는 경우 랜덤 배치
+                        const minX = padding + photo.width / 2;
+                        const maxX = corkboardRect.width - padding - photo.width / 2;
+                        const minY = padding + photo.height / 2;
+                        const maxY = corkboardRect.height - padding - photo.height / 2;
+                        x = minX + Math.random() * (maxX - minX);
+                        y = minY + Math.random() * (maxY - minY);
+                    }
+                    
+                    // 사진 요소 생성
+                    const photoWrapper = document.createElement('div');
+                    photoWrapper.className = 'photo-wrapper';
+                    photoWrapper.style.position = 'absolute';
+                    photoWrapper.style.left = (x / corkboardRect.width * 100) + '%';
+                    photoWrapper.style.top = (y / corkboardRect.height * 100) + '%';
+                    photoWrapper.style.transform = 'translate(-50%, -50%)';
+                    
+                    const pin = document.createElement('div');
+                    pin.className = 'photo-pin';
+                    
+                    const img = document.createElement('img');
+                    img.src = photo.path;
+                    img.className = 'corkboard-photo';
+                    img.style.width = photo.width + 'px';
+                    img.style.height = photo.height + 'px';
+                    
+                    // 드래그 이벤트 추가
+                    img.addEventListener('mousedown', startDrag);
+                    img.addEventListener('touchstart', startDragTouch);
+                    
+                    photoWrapper.appendChild(pin);
+                    photoWrapper.appendChild(img);
+                    corkboard.appendChild(photoWrapper);
+                    
+                    // 배치된 사진 정보 저장
+                    placedPhotos.push({
+                        x: x,
+                        y: y,
+                        width: photo.width,
+                        height: photo.height
+                    });
+                });
+            }
+        }
+
+        function startDrag(e) {
+            e.preventDefault();
+            isDragging = true;
+            currentPhoto = e.target.closest('.photo-wrapper');
+            const rect = currentPhoto.getBoundingClientRect();
+            const corkboardRect = document.getElementById('corkboard').getBoundingClientRect();
+            
+            // transform을 고려한 오프셋 계산
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            offsetX = e.clientX - centerX;
+            offsetY = e.clientY - centerY;
+            
+            currentPhoto.querySelector('.corkboard-photo').classList.add('dragging');
+            
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', stopDrag);
+        }
+
+        function startDragTouch(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            isDragging = true;
+            currentPhoto = e.target.closest('.photo-wrapper');
+            const rect = currentPhoto.getBoundingClientRect();
+            const corkboardRect = document.getElementById('corkboard').getBoundingClientRect();
+            
+            // transform을 고려한 오프셋 계산
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            offsetX = touch.clientX - centerX;
+            offsetY = touch.clientY - centerY;
+            
+            currentPhoto.querySelector('.corkboard-photo').classList.add('dragging');
+            
+            document.addEventListener('touchmove', dragTouch);
+            document.addEventListener('touchend', stopDrag);
+        }
+
+        function drag(e) {
+            if (!isDragging || !currentPhoto) return;
+            
+            const corkboard = document.getElementById('corkboard');
+            const corkboardRect = corkboard.getBoundingClientRect();
+            const photoRect = currentPhoto.getBoundingClientRect();
+            
+            // 마우스 위치를 기준으로 중심점 계산
+            let centerX = e.clientX - corkboardRect.left;
+            let centerY = e.clientY - corkboardRect.top;
+            
+            // 코르크보드 경계 내로 제한
+            const halfWidth = photoRect.width / 2;
+            const halfHeight = photoRect.height / 2;
+            centerX = Math.max(halfWidth, Math.min(centerX, corkboardRect.width - halfWidth));
+            centerY = Math.max(halfHeight, Math.min(centerY, corkboardRect.height - halfHeight));
+            
+            currentPhoto.style.left = (centerX / corkboardRect.width * 100) + '%';
+            currentPhoto.style.top = (centerY / corkboardRect.height * 100) + '%';
+            currentPhoto.style.transform = 'translate(-50%, -50%)';
+        }
+
+        function dragTouch(e) {
+            if (!isDragging || !currentPhoto) return;
+            const touch = e.touches[0];
+            
+            const corkboard = document.getElementById('corkboard');
+            const corkboardRect = corkboard.getBoundingClientRect();
+            const photoRect = currentPhoto.getBoundingClientRect();
+            
+            // 터치 위치를 기준으로 중심점 계산
+            let centerX = touch.clientX - corkboardRect.left;
+            let centerY = touch.clientY - corkboardRect.top;
+            
+            // 코르크보드 경계 내로 제한
+            const halfWidth = photoRect.width / 2;
+            const halfHeight = photoRect.height / 2;
+            centerX = Math.max(halfWidth, Math.min(centerX, corkboardRect.width - halfWidth));
+            centerY = Math.max(halfHeight, Math.min(centerY, corkboardRect.height - halfHeight));
+            
+            currentPhoto.style.left = (centerX / corkboardRect.width * 100) + '%';
+            currentPhoto.style.top = (centerY / corkboardRect.height * 100) + '%';
+            currentPhoto.style.transform = 'translate(-50%, -50%)';
+        }
+
+        function stopDrag() {
+            if (currentPhoto) {
+                currentPhoto.querySelector('.corkboard-photo').classList.remove('dragging');
+            }
+            isDragging = false;
+            currentPhoto = null;
+            
+            document.removeEventListener('mousemove', drag);
+            document.removeEventListener('mouseup', stopDrag);
+            document.removeEventListener('touchmove', dragTouch);
+            document.removeEventListener('touchend', stopDrag);
+        }
+
+
+        // 팝업 외부 클릭 시 닫기
+        document.getElementById('corkboardPopup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeCorkboard();
+            }
+        });
 
         // 페이지 로드 시 첫 번째 영상 자동 재생 (선택사항)
         // window.onload = function() {
